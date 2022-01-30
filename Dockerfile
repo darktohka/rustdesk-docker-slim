@@ -11,3 +11,4 @@ FROM scratch
 COPY --from=builder /tmp/app/ /
 
 WORKDIR /srv
+USER 3300
