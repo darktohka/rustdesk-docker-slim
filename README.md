@@ -22,3 +22,45 @@ sudo docker image pull darktohka/rustdesk-docker-slim
 sudo docker run --name hbbr -p 21117:21117 -v `pwd`:/srv -it --rm darktohka/rustdesk-docker-slim hbbr
 sudo docker run --name hbbs -p 21115:21115 -p 21116:21116 -p 21116:21116/udp -v `pwd`:/srv -it --rm darktohka/rustdesk-docker-slim hbbs -r <relay-server-ip>
 ```
+
+### Docker-Compose example
+
+First, run the following commands:
+
+```
+mkdir -p data
+chown -R 3300:3300 data
+```
+
+Then create the following `docker-compose.yml` file:
+
+```
+version: '3.8'
+
+services:
+  id:
+    image: darktohka/rustdesk-docker-slim
+    ports:
+    - "21115:21115"
+    - "21116:21116"
+    - "21116:21116/udp"
+    networks:
+    - rustdesk
+    depends_on:
+    - relay
+    volumes:
+    - "./data:/srv"
+    command: hbbs -r 127.0.0.1
+  relay:
+    image: darktohka/rustdesk-docker-slim
+    ports:
+    - "21117:21117"
+    networks:
+    - rustdesk
+    volumes:
+    - "./data:/srv"
+    command: hbbr
+
+networks:
+  rustdesk:
+```
