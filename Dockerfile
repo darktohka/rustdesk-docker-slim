@@ -1,10 +1,12 @@
 FROM debian:unstable-slim AS builder
 
 COPY create_appdir.sh /tmp/
-COPY binaries /tmp/binaries
 
 WORKDIR /tmp
-RUN /bin/bash create_appdir.sh
+RUN \
+  apt-get update \
+  && apt-get install -y curl unzip \
+  && /bin/bash create_appdir.sh
 
 FROM scratch
 

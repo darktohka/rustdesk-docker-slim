@@ -7,6 +7,20 @@ user_id="3300"
 app_dir="app"
 binary_dir="binaries"
 
+if ! [[ -d "$binary_dir" ]]; then
+  mkdir -p "$binary_dir"
+  cd "$binary_dir"
+
+  echo "Downloading release from GitHub..."
+  curl -fsSL https://github.com/rustdesk/rustdesk-server/releases/latest/download/rustdesk-server-linux-x64.zip -O
+
+  echo "Unzipping release..."
+  unzip -qq rustdesk-server-linux-x64.zip
+
+  rm rustdesk-server-linux-x64.zip
+  cd ..
+fi
+
 discovered=()
 
 function package() {
